@@ -327,12 +327,114 @@
       flex-direction: column;
       gap: 1.25rem;
       flex-shrink: 0;
-      transition: transform 0.25s ease, margin-left 0.25s ease;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.25s ease,
+                  visibility 0.25s ease;
+      z-index: 800;
     }
 
+    /* Desktop Collapsed State */
     .app-sidebar.collapsed {
       margin-left: calc(-1 * var(--sidebar-width));
-      transform: translateX(-100%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Backdrop for Mobile Off-Canvas */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      z-index: 990;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .sidebar-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Mobile Header Inside Sidebar */
+    .sidebar-mobile-header {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-mobile-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .btn-close-sidebar {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-close-sidebar:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Mobile In-Sidebar Search */
+    .sidebar-search-box {
+      display: none;
+      position: relative;
+      align-items: center;
+      width: 100%;
+    }
+
+    .sidebar-search-box svg {
+      position: absolute;
+      left: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .sidebar-search-box .search-input {
+      width: 100%;
+      padding: 0.6rem 2.25rem 0.6rem 2.25rem;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .sidebar-search-box .search-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px var(--accent-light);
+    }
+
+    .sidebar-search-box .search-count {
+      position: absolute;
+      right: 0.6rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
     }
 
     .sidebar-section-title {
@@ -582,16 +684,24 @@
     }
 
     /* Tables */
-    .reading-article table {
+    .table-responsive {
       width: 100%;
-      border-collapse: collapse;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin: 2rem 0;
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
       border-radius: var(--radius-md);
-      overflow: hidden;
       border: 1px solid var(--border-color);
       box-shadow: var(--shadow-sm);
+    }
+
+    .reading-article table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      overflow: hidden;
     }
 
     .reading-article th,
@@ -750,19 +860,134 @@
 
     /* Mobile Responsive */
     @media (max-width: 900px) {
+      :root {
+        --sidebar-width: min(320px, 86vw);
+        --header-height: 60px;
+      }
+
+      .app-header {
+        padding: 0 1rem;
+      }
+
+      .sidebar-mobile-header {
+        display: flex;
+      }
+
+      .sidebar-search-box {
+        display: flex;
+      }
+
       .app-sidebar {
         position: fixed;
         left: 0;
-        top: var(--header-height);
-        height: calc(100vh - var(--header-height));
-        z-index: 950;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        height: 100dvh;
+        z-index: 995;
         box-shadow: var(--shadow-lg);
+        transform: translateX(-100%);
+        margin-left: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        background: var(--bg-surface);
       }
+
+      .app-sidebar.open {
+        transform: translateX(0);
+      }
+
       .search-wrapper {
         display: none;
       }
+
+      .app-main {
+        padding: 1.5rem 0.85rem 4.5rem 0.85rem;
+      }
+
       .reading-article {
-        padding: 2rem 1.5rem;
+        padding: 2.25rem 1.25rem;
+        border-radius: var(--radius-md);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .app-header {
+        padding: 0 0.65rem;
+        gap: 0.35rem;
+      }
+
+      .brand-section {
+        gap: 0.45rem;
+      }
+
+      .btn-toggle-sidebar {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+      }
+
+      .brand-title {
+        font-size: 1.05rem;
+        letter-spacing: 0.02em;
+      }
+
+      .brand-title span.badge {
+        display: none;
+      }
+
+      .header-controls {
+        gap: 0.25rem;
+      }
+
+      .control-group {
+        padding: 2px;
+        gap: 1px;
+      }
+
+      .btn-control {
+        padding: 5px 6px;
+        font-size: 0.74rem;
+        gap: 0.2rem;
+      }
+
+      .theme-label-text,
+      .github-label-text {
+        display: none;
+      }
+
+      .reading-article {
+        padding: 1.5rem 0.85rem;
+        font-size: 0.94rem;
+        border-radius: var(--radius-sm);
+      }
+
+      .reading-article h1 {
+        font-size: 1.55rem;
+        margin-top: 2rem;
+      }
+
+      .reading-article h2 {
+        font-size: 1.28rem;
+        margin-top: 1.75rem;
+      }
+
+      .reading-article h3 {
+        font-size: 1.05rem;
+        margin-top: 1.35rem;
+      }
+
+      .floating-actions {
+        right: 0.85rem;
+        bottom: 0.85rem;
+        gap: 0.4rem;
+      }
+
+      .fab-btn {
+        width: 38px;
+        height: 38px;
       }
     }
   </style>
@@ -812,9 +1037,9 @@
 
       <!-- Themes -->
       <div class="control-group">
-        <button class="btn-control active" id="theme-parchment-btn" title="Parchment Library Theme">🏛️ Parchment</button>
-        <button class="btn-control" id="theme-dark-btn" title="Midnight Slate Dark Mode">🌙 Dark</button>
-        <button class="btn-control" id="theme-light-btn" title="Editorial Clean Light">☀️ Light</button>
+        <button class="btn-control active" id="theme-parchment-btn" title="Parchment Library Theme">🏛️ <span class="theme-label-text">Parchment</span></button>
+        <button class="btn-control" id="theme-dark-btn" title="Midnight Slate Dark Mode">🌙 <span class="theme-label-text">Dark</span></button>
+        <button class="btn-control" id="theme-light-btn" title="Editorial Clean Light">☀️ <span class="theme-label-text">Light</span></button>
       </div>
 
       <!-- GitHub Repository Link -->
@@ -823,15 +1048,39 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
           </svg>
-          <span>GitHub</span>
+          <span class="github-label-text">GitHub</span>
         </a>
       </div>
     </div>
   </header>
 
   <div class="app-container">
+    <!-- Backdrop Overlay for Mobile -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" title="Tap to close sidebar"></div>
+
     <!-- Sidebar -->
-    <aside class="app-sidebar" id="app-sidebar">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Navigation Sidebar">
+      <!-- Mobile Close Bar -->
+      <div class="sidebar-mobile-header">
+        <span class="sidebar-mobile-title">PhiloNotes</span>
+        <button class="btn-close-sidebar" id="close-sidebar-btn" title="Close navigation menu" aria-label="Close sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Search inside Sidebar -->
+      <div class="sidebar-search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="sidebar-doc-search" class="search-input" placeholder="Search cases, doctrines...">
+        <span id="sidebar-search-count" class="search-count"></span>
+      </div>
+
       <div>
         <div class="sidebar-section-title">Select Document</div>
         <div class="doc-pill-list" id="doc-list">
@@ -933,8 +1182,14 @@
     const docList = document.getElementById("doc-list");
     const searchInput = document.getElementById("doc-search");
     const searchCount = document.getElementById("search-count");
+    const sidebarSearchInput = document.getElementById("sidebar-doc-search");
+    const sidebarSearchCount = document.getElementById("sidebar-search-count");
     const progressBar = document.getElementById("progress-bar");
     const toast = document.getElementById("toast");
+
+    function isMobile() {
+      return window.innerWidth <= 900;
+    }
 
     function showToast(message) {
       toast.textContent = message;
@@ -961,13 +1216,30 @@
       populateDocList();
       renderActiveDoc();
       window.scrollTo(0, 0);
+      if (isMobile()) {
+        closeSidebarMobile();
+      }
     }
 
     function renderActiveDoc() {
       articleContent.innerHTML = renderMarkdown(activeMarkdown);
+      wrapTables();
       buildTOC();
       enhanceCaseBadges();
       clearSearch();
+    }
+
+    // Wrap tables for responsive horizontal scrolling
+    function wrapTables() {
+      const tables = articleContent.querySelectorAll("table");
+      tables.forEach(table => {
+        if (!table.parentElement.classList.contains("table-responsive")) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "table-responsive";
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+        }
+      });
     }
 
     // Auto-generate Interactive Table of Contents
@@ -989,7 +1261,13 @@
         a.textContent = heading.textContent.replace(/^#+\s*/, "");
         a.onclick = (e) => {
           e.preventDefault();
-          document.getElementById(heading.id).scrollIntoView({ behavior: "smooth" });
+          const targetEl = document.getElementById(heading.id);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: "smooth" });
+          }
+          if (isMobile()) {
+            closeSidebarMobile();
+          }
         };
 
         li.appendChild(a);
@@ -1050,16 +1328,39 @@
     }
 
     /* ==========================================================================
-       INSTANT SEARCH & HIGHLIGHT
+       INSTANT SEARCH & HIGHLIGHT (Synced for Desktop & Mobile)
        ========================================================================== */
-    searchInput.addEventListener("input", (e) => {
+    function updateSearchInputs(val) {
+      if (searchInput && searchInput.value !== val) searchInput.value = val;
+      if (sidebarSearchInput && sidebarSearchInput.value !== val) sidebarSearchInput.value = val;
+    }
+
+    function updateSearchCount(text) {
+      if (searchCount) searchCount.textContent = text;
+      if (sidebarSearchCount) sidebarSearchCount.textContent = text;
+    }
+
+    function handleSearchInput(e) {
       const query = e.target.value.trim();
+      updateSearchInputs(e.target.value);
       if (!query) {
         clearSearch();
         return;
       }
       performSearch(query);
-    });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener("input", handleSearchInput);
+    }
+    if (sidebarSearchInput) {
+      sidebarSearchInput.addEventListener("input", handleSearchInput);
+      sidebarSearchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && isMobile()) {
+          closeSidebarMobile();
+        }
+      });
+    }
 
     function clearSearch() {
       const marks = articleContent.querySelectorAll("mark.search-match");
@@ -1068,7 +1369,7 @@
         parent.replaceChild(document.createTextNode(m.textContent), m);
         parent.normalize();
       });
-      searchCount.textContent = "";
+      updateSearchCount("");
       searchMatches = [];
       currentMatchIndex = -1;
     }
@@ -1096,7 +1397,7 @@
       });
 
       searchMatches = Array.from(articleContent.querySelectorAll("mark.search-match"));
-      searchCount.textContent = `${searchMatches.length} found`;
+      updateSearchCount(`${searchMatches.length} found`);
 
       if (searchMatches.length > 0) {
         currentMatchIndex = 0;
@@ -1152,11 +1453,72 @@
       }
     };
 
-    // Sidebar Toggle
+    // Sidebar Toggle (Desktop Collapse & Mobile Off-Canvas Drawer)
     const sidebar = document.getElementById("app-sidebar");
-    document.getElementById("toggle-sidebar").onclick = () => {
-      sidebar.classList.toggle("collapsed");
-    };
+    const toggleSidebarBtn = document.getElementById("toggle-sidebar");
+    const closeSidebarBtn = document.getElementById("close-sidebar-btn");
+    const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+
+    function openSidebarMobile() {
+      sidebar.classList.add("open");
+      if (sidebarBackdrop) sidebarBackdrop.classList.add("active");
+      toggleSidebarBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      if (sidebarSearchInput) {
+        setTimeout(() => sidebarSearchInput.focus(), 250);
+      }
+    }
+
+    function closeSidebarMobile() {
+      sidebar.classList.remove("open");
+      if (sidebarBackdrop) sidebarBackdrop.classList.remove("active");
+      toggleSidebarBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    function toggleSidebar() {
+      if (isMobile()) {
+        if (sidebar.classList.contains("open")) {
+          closeSidebarMobile();
+        } else {
+          openSidebarMobile();
+        }
+      } else {
+        const isCollapsed = sidebar.classList.toggle("collapsed");
+        toggleSidebarBtn.setAttribute("aria-expanded", !isCollapsed);
+        toggleSidebarBtn.title = isCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)";
+        try {
+          localStorage.setItem("philo_sidebar_collapsed", isCollapsed ? "1" : "0");
+        } catch(e) {}
+      }
+    }
+
+    toggleSidebarBtn.onclick = toggleSidebar;
+    if (closeSidebarBtn) closeSidebarBtn.onclick = closeSidebarMobile;
+    if (sidebarBackdrop) sidebarBackdrop.onclick = closeSidebarMobile;
+
+    // Restore desktop preference on load
+    try {
+      if (!isMobile() && localStorage.getItem("philo_sidebar_collapsed") === "1") {
+        sidebar.classList.add("collapsed");
+        toggleSidebarBtn.setAttribute("aria-expanded", "false");
+        toggleSidebarBtn.title = "Expand Sidebar (Ctrl+B)";
+      }
+    } catch(e) {}
+
+    // Close on mobile when Escape key pressed
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isMobile() && sidebar.classList.contains("open")) {
+        closeSidebarMobile();
+      }
+    });
+
+    // Auto-close mobile drawer if resized to desktop
+    window.addEventListener("resize", () => {
+      if (!isMobile() && sidebar.classList.contains("open")) {
+        closeSidebarMobile();
+      }
+    });
 
     // Print & Scroll Top FABs
     document.getElementById("print-btn").onclick = () => window.print();
@@ -1185,11 +1547,15 @@
     window.addEventListener("keydown", (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
         e.preventDefault();
-        sidebar.classList.toggle("collapsed");
+        toggleSidebar();
       }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
         e.preventDefault();
-        searchInput.focus();
+        if (isMobile()) {
+          openSidebarMobile();
+        } else {
+          searchInput.focus();
+        }
       }
     });
 
