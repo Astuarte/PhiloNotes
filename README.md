@@ -59,6 +59,7 @@ Because the repository is formatted with `index.html` and `.nojekyll` at the roo
 | :--- | :--- |
 | **📘 Page-by-Page Summary (Aquino)** | Exhaustive, page-by-page breakdown of Chapters 1 to 3 (Pages 1–125), including all cited Supreme Court doctrines and epigraphs. |
 | **📑 Structured Reviewer & Doctrinal Index** | Outline-style reviewer organized by doctrines, tests, definitions, and comparative matrices. |
+| **🎯 Master Bar-Style Quiz & Review Companion** | Comprehensive self-testing exam covering Chapters 1 to 3 (Pages 1–125) with 6 test formats (MCQ, True/False, Identification, Matching, Comparative Matrices, Bar Problems) with instant click-to-reveal answers. |
 | **📝 Chapter 1 Notes** | In-depth notes focusing on the nature of law, philosophy, separation of powers, and constitutional commissions. |
 | **🎓 Class Lecture Notes (Sept. 2026)** | Practical class notes, case discussions, and professor highlights. |
 
@@ -77,6 +78,7 @@ PhiloNotes/
 ├── .gitignore              # Ignores temporary OS and Office lock files
 └── Documents/              # Original source documents and notes
     ├── Aquino_Chapter_1_Summary_and_Reviewer.md
+    ├── Aquino_Philosophy_of_Law_Comprehensive_Quiz.md
     ├── Aquino_Philosophy_of_Law_Page_By_Page_Summary.md
     ├── Aquino_Philosophy_of_Law_Structured_Reviewer.md
     ├── CHAPTER-1.docx
