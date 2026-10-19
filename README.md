@@ -76,14 +76,17 @@ PhiloNotes/
 ├── .nojekyll               # Bypasses Jekyll to serve assets directly
 ├── .gitignore              # Ignores temporary OS and Office lock files
 └── Documents/              # Original source documents and notes
+    ├── Aquino_Chapter_1_Summary_and_Reviewer.md
     ├── Aquino_Philosophy_of_Law_Page_By_Page_Summary.md
     ├── Aquino_Philosophy_of_Law_Structured_Reviewer.md
-    ├── CHAPTER-1.md
     ├── CHAPTER-1.docx
+    ├── CHAPTER-1.md
     ├── Chapter1toChapter3_Aquino.md
     ├── Chapter1toChapter3_Aquino.pdf
+    ├── HISPHI020-Notes-Sept.-21-2026.docx
     ├── HISPHI020-Notes-Sept.-21-2026.md
-    └── HISPHI020-Notes-Sept.-21-2026.docx
+    ├── Lecture_Notes_HISPHI020_Summary_and_Reviewer.md
+    └── PhiloNotes_Reader.html
 ```
 
 ---
