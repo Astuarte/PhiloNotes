@@ -1,0 +1,19 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Microsoft Office temporary lock files
+~$*.docx
+~$*.doc
+~$*.pptx
+~$*.xlsx
+
+# Editor & IDE configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
